@@ -43,6 +43,7 @@ namespace perial_server
                 app.UseDeveloperExceptionPage();
             }
 
+            
             app.UseRouting();
 
             app.UseAuthorization();
