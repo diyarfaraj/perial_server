@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 
 namespace perial_server.Controllers
 {
-    [ApiController]
-    [Route("api/[Controller]")]
-    public class UsersController : ControllerBase
+    
+    public class UsersController : BaseApiController
     {
         private readonly DataContext _context;
 

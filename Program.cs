@@ -23,11 +23,7 @@ namespace perial_server
                 {
                     webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
                     webBuilder.UseUrls("http://localhost:5000", "http://192.168.0.22:53736");
-                 
-             
                     webBuilder.UseStartup<Startup>();
-                    
-
                 });
     }
 }
