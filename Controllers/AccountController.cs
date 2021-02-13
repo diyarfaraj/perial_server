@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using perial_server.Data;
 using perial_server.DTOs;
 using perial_server.Entities;
+using perial_server.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,14 +16,16 @@ namespace perial_server.Controllers
     public class AccountController : BaseApiController
     {
         private readonly DataContext _context;
+        private readonly ITokenService _tokenService;
 
-        public AccountController( DataContext context)
+        public AccountController( DataContext context, ITokenService tokenService)
         {
             _context = context;
+            _tokenService = tokenService;
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<AppUser>> Register(RegisterDTO registerDTO )
+        public async Task<ActionResult<UserDto>> Register(RegisterDTO registerDTO )
         {
 
         
@@ -44,12 +47,16 @@ namespace perial_server.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return user;
+            return new UserDto
+            {
+                Username = user.UserName,
+                Token = _tokenService.CreateToken(user)
+            };
         }
 
         [HttpPost("login")]
 
-        public async Task<ActionResult<AppUser>> Login(LoginDto loginDto)
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             var user = await _context.Users.SingleOrDefaultAsync(user => user.UserName == loginDto.Username);
             
@@ -66,7 +73,11 @@ namespace perial_server.Controllers
                 if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Wrong password");  
             }
 
-            return user; 
+            return new UserDto
+            {
+                Username = user.UserName,
+                Token = _tokenService.CreateToken(user)
+            };
         }
 
         private async Task<bool> UserExists(string username)
