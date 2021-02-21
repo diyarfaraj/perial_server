@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using perial_server.Data;
 using perial_server.Extensions;
 using perial_server.Interfaces;
+using perial_server.Middleware;
 using perial_server.Services;
 using System;
 using System.Collections.Generic;
@@ -42,11 +43,11 @@ namespace perial_server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
+            app.UseMiddleware<ExceptionMiddleware>();
             
             app.UseRouting();
 
