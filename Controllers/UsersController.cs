@@ -25,6 +25,7 @@ namespace perial_server.Controllers
 
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
+            
             return await _context.Users.ToListAsync();
         }
         [Authorize]
