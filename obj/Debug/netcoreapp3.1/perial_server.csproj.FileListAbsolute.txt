@@ -67,3 +67,4 @@ C:\Users\User\source\repos\perial_server\perial_server\bin\Debug\netcoreapp3.1\M
 C:\Users\User\source\repos\perial_server\perial_server\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
 C:\Users\User\source\repos\perial_server\perial_server\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\User\source\repos\perial_server\perial_server\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\User\source\repos\perial_server\perial_server\bin\Debug\netcoreapp3.1\Data\UserSeedData.json
