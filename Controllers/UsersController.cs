@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using perial_server.Data;
 using perial_server.Entities;
+using perial_server.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,25 +14,25 @@ namespace perial_server.Controllers
     [Authorize]
     public class UsersController : BaseApiController
     {
-        private readonly DataContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public UsersController(DataContext context)
+        public UsersController(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
 
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
-            
-            return await _context.Users.ToListAsync();
+            var users = await _userRepository.GetUsersAsync();
+            return Ok(users);
         }
-        [HttpGet("{id}")]
+        [HttpGet("{username}")]
 
-        public async Task<ActionResult<AppUser>> GetUser(int id)
+        public async Task<ActionResult<AppUser>> GetUser(string username)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userRepository.GetUserByUsernameAsync(username);
             
             return user;
         }
