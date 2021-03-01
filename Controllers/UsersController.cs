@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using perial_server.Data;
+using perial_server.DTOs;
 using perial_server.Entities;
 using perial_server.Interfaces;
 using System;
@@ -15,26 +17,27 @@ namespace perial_server.Controllers
     public class UsersController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UsersController(IUserRepository userRepository)
+        public UsersController(IUserRepository userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+             _mapper = mapper;
         }
 
         [HttpGet]
 
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers()
         {
             var users = await _userRepository.GetUsersAsync();
             return Ok(users);
         }
         [HttpGet("{username}")]
 
-        public async Task<ActionResult<AppUser>> GetUser(string username)
+        public async Task<ActionResult<MemberDTO>> GetUser(string username)
         {
-            var user = await _userRepository.GetUserByUsernameAsync(username);
+            return await _userRepository.GetMemberAsync(username);
             
-            return user;
         }
     }
 }

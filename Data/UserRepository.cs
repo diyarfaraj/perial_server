@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using perial_server.DTOs;
 using perial_server.Entities;
 using perial_server.Interfaces;
 using System;
@@ -11,10 +14,25 @@ namespace perial_server.Data
     public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
+        private readonly IMapper _mapper;
 
-        public UserRepository(DataContext context)
+        public UserRepository(DataContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<MemberDTO> GetMemberAsync(string username)
+        {
+            return await _context.Users
+                .Where(user => user.UserName == username)
+                .ProjectTo<MemberDTO>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+        }
+
+        public Task<IEnumerable<MemberDTO>> GetMembersAsync()
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<AppUser> GetUserByIdAsync(int id)
