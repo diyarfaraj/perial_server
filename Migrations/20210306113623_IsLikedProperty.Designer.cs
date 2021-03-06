@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using perial_server.Data;
 
 namespace perial_server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210306113623_IsLikedProperty")]
+    partial class IsLikedProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,21 +96,6 @@ namespace perial_server.Migrations
                     b.ToTable("Photos ");
                 });
 
-            modelBuilder.Entity("perial_server.Entities.UserLike", b =>
-                {
-                    b.Property<int>("SourceUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("LikedUserId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("SourceUserId", "LikedUserId");
-
-                    b.HasIndex("LikedUserId");
-
-                    b.ToTable("Likes");
-                });
-
             modelBuilder.Entity("perial_server.Entities.Photo", b =>
                 {
                     b.HasOne("perial_server.Entities.AppUser", "AppUser")
@@ -120,31 +107,8 @@ namespace perial_server.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("perial_server.Entities.UserLike", b =>
-                {
-                    b.HasOne("perial_server.Entities.AppUser", "LikedUser")
-                        .WithMany("LikedByUsers")
-                        .HasForeignKey("LikedUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("perial_server.Entities.AppUser", "SourceUser")
-                        .WithMany("LikedUsers")
-                        .HasForeignKey("SourceUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("LikedUser");
-
-                    b.Navigation("SourceUser");
-                });
-
             modelBuilder.Entity("perial_server.Entities.AppUser", b =>
                 {
-                    b.Navigation("LikedByUsers");
-
-                    b.Navigation("LikedUsers");
-
                     b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618

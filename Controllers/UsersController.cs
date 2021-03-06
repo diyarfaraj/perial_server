@@ -29,7 +29,7 @@ namespace perial_server.Controllers
 
         public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers()
         {
-            var users = await _userRepository.GetUsersAsync();
+            var users = await _userRepository.GetMembersAsync();
             return Ok(users);
         }
         [HttpGet("{username}")]
