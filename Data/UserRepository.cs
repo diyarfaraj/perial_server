@@ -4,13 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using perial_server.DTOs;
 using perial_server.Entities;
 using perial_server.Interfaces;
+using perial_server.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace perial_server.Data
 {
+
     public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
@@ -40,9 +44,9 @@ namespace perial_server.Data
         {
             return await _context.Users.FindAsync(id);
         }
-
         public async Task<AppUser> GetUserByUsernameAsync(string username)
         {
+            //todo: do not return logged in user in users list
             return await _context.Users
                 .Include(user => user.Photos)
                 .SingleOrDefaultAsync(user => user.UserName == username);

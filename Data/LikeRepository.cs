@@ -18,7 +18,7 @@ namespace perial_server.Data
         {
             _context = context;
         }
-
+        //like methods
         public async Task<UserLike> GetUserLike(int sourceUserId, int likedUserId)
         {
             return await _context.Likes.FindAsync(sourceUserId, likedUserId);
@@ -53,6 +53,44 @@ namespace perial_server.Data
         {
             return await _context.Users
                 .Include(u => u.LikedUsers)
+                .FirstOrDefaultAsync(x => x.Id == userId);
+        }
+
+        //dislike methods--------------------------------------------------------------------------------------------
+        public async Task<UserDisLike> GetUserDislike(int sourceUserId, int dislikedUserId)
+        {
+            return await _context.DisLikes.FindAsync(sourceUserId, dislikedUserId);
+        }
+
+        public async Task<IEnumerable<DislikeDto>> GetUserDislikes(string predicate, int userId)
+        {
+            var users = _context.Users.OrderBy(u => u.UserName).AsQueryable();
+            var dislikes = _context.DisLikes.AsQueryable();
+            if (predicate == "disliked")
+            {
+                dislikes = dislikes.Where(dislike => dislike.SourceUserId == userId);
+                users = dislikes.Select(dislike => dislike.DisLikedUser);
+            }
+            if (predicate == "dislikedBy")
+            {
+                dislikes = dislikes.Where(dislike => dislike.DisLikedUserId == userId);
+                users = dislikes.Select(dislike => dislike.SourceUser);
+            }
+
+            return await users.Select(user => new DislikeDto
+            {
+                Username = user.UserName,
+                Age = user.DateOfBirth.CalculateAge(),
+                PhotoUrl = user.Photos.FirstOrDefault(p => p.IsMain).Url,
+                City = user.City,
+                Id = user.Id
+            }).ToListAsync();
+        }
+
+        public async Task<AppUser> GetUserWithDislikes(int userId)
+        {
+            return await _context.Users
+                .Include(u => u.DisLikedUsers)
                 .FirstOrDefaultAsync(x => x.Id == userId);
         }
     }

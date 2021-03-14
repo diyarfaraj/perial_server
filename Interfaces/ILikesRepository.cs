@@ -12,6 +12,10 @@ namespace perial_server.Interfaces
         Task<UserLike> GetUserLike(int sourceUserId, int likedUserId);
         Task<AppUser> GetUserWithLikes(int userId);
         Task<IEnumerable<LikeDto>> GetUserLikes(string predicate, int userId);
+        //dislike
+        Task<UserDisLike> GetUserDislike(int sourceUserId, int likedUserId);
+        Task<AppUser> GetUserWithDislikes(int userId);
+        Task<IEnumerable<DislikeDto>> GetUserDislikes(string predicate, int userId);
 
     }
 }

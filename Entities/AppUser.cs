@@ -26,6 +26,8 @@ namespace perial_server.Entities
         public ICollection<Photo> Photos { get; set; }
         public ICollection<UserLike> LikedByUsers { get; set; }
         public ICollection<UserLike> LikedUsers { get; set; }
+        public ICollection<UserDisLike> DisLikedByUsers { get; set; }
+        public ICollection<UserDisLike> DisLikedUsers { get; set; }
 
     }
 }

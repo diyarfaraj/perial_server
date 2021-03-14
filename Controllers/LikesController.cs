@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace perial_server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class LikesController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
@@ -48,5 +48,7 @@ namespace perial_server.Controllers
             var users = await _likesRepository.GetUserLikes(predicate, User.GetUserId());
             return Ok(users);
         }
+
+       
     }
 }
