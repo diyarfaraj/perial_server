@@ -58,22 +58,40 @@ namespace perial_server.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(user => user.UserName == loginDto.Username);
-            if(user == null)
+            UserDto emptyUser = new UserDto();
+            try
             {
-                return Unauthorized("Invalid username");
+                var user = await _context.Users.SingleOrDefaultAsync(user => user.UserName == loginDto.Username);
+                if (user == null)
+                {
+                    return Unauthorized("Invalid username");
+                }
+                using var hmac = new HMACSHA512(user.PasswordSalt);
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Wrong password");
+                }
+                return new UserDto
+                {
+                    Username = user.UserName,
+                    Token = _tokenService.CreateToken(user),
+                    Age = Extensions.DateTimeExtensions.CalculateAge(user.DateOfBirth),
+                    City = user.City,
+                    Country = user.Country,
+                    Interests = user.Interests,
+                    Introduction = user.Introduction,
+                    LookingFor = user.LookingFor,
+                    //PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).ToString(),
+                    //Photos = user.Photos
+                };
             }
-            using var hmac = new HMACSHA512(user.PasswordSalt);
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-            for (int i = 0; i < computedHash.Length; i++)
+            catch (Exception ex)
             {
-                if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Wrong password");  
+
+                 Console.WriteLine("IOException source: {0}", ex.Source);
             }
-            return new UserDto
-            {
-                Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
-            };
+            return emptyUser;
         }
 
         private async Task<bool> UserExists(string username)
