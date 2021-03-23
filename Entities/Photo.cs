@@ -2,7 +2,7 @@
 
 namespace perial_server.Entities
 {
-    [Table("Photos ")]
+    [Table("Photos")]
     public class Photo
     {
         public int Id { get; set; }

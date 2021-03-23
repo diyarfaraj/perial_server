@@ -62,6 +62,7 @@ namespace perial_server.Controllers
             try
             {
                 var user = await _context.Users.SingleOrDefaultAsync(user => user.UserName == loginDto.Username);
+                var userPhoto = await _context.Photos.FirstOrDefaultAsync(photo => photo.AppUserID == user.Id);
                 if (user == null)
                 {
                     return Unauthorized("Invalid username");
@@ -82,7 +83,7 @@ namespace perial_server.Controllers
                     Interests = user.Interests,
                     Introduction = user.Introduction,
                     LookingFor = user.LookingFor,
-                    //PhotoUrl = user.Photos.FirstOrDefault(x => x.IsMain).ToString(),
+                    PhotoUrl = userPhoto.Url,
                     //Photos = user.Photos
                 };
             }
