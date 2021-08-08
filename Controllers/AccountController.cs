@@ -58,6 +58,8 @@ namespace perial_server.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
+            //password: Pa$$w0rd
+            //base url: http://192.168.0.22:53736
             UserDto emptyUser = new UserDto();
             try
             {
