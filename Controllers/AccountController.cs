@@ -86,7 +86,7 @@ namespace perial_server.Controllers
                     Introduction = user.Introduction,
                     LookingFor = user.LookingFor,
                     PhotoUrl = userPhoto.Url,
-                    /Photos = (ICollection<PhotoDto>)user.Photos
+                    //Photos = (ICollection<PhotoDto>)user.Photos
                 };
             }
             catch (Exception ex)
