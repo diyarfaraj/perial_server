@@ -58,7 +58,7 @@ namespace perial_server.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            //password: Pa$$w0rd
+            //password for all users: Pa$$w0rd
             //base url: http://192.168.0.22:53736
             UserDto emptyUser = new UserDto();
             try
@@ -86,7 +86,7 @@ namespace perial_server.Controllers
                     Introduction = user.Introduction,
                     LookingFor = user.LookingFor,
                     PhotoUrl = userPhoto.Url,
-                    //Photos = user.Photos
+                    /Photos = (ICollection<PhotoDto>)user.Photos
                 };
             }
             catch (Exception ex)
